@@ -8,6 +8,8 @@ import { connectToDB } from "./models";
 dotenv.config();
 const app = express();
 
+const port = process.env.PORT || 4000;
+
 const main = async () => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cors());
@@ -21,6 +23,6 @@ const main = async () => {
     res.send("we are on home");
   });
   await connectToDB();
-  app.listen(4000);
+  app.listen(port);
 };
 main();

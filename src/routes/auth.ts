@@ -10,14 +10,14 @@ router.get("/", async (_, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const message = "Нэвтрэх нэр эсвэл нууц үг буруу байна.";
+  const message = "Имэйл эсвэл нууц үг буруу байна.";
 
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { email, password } = req.body;
+  if (!email || !password) {
     return res.status(200).send({ success: false, result: message });
   }
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ email });
   if (!user) {
     return res.status(200).send({ success: false, result: message });
   }
@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
   }
 
   const accessToken = await jwt.sign(
-    { username },
+    { email },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: "15m",
@@ -45,8 +45,8 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username) {
+  const { email, password } = req.body;
+  if (!email) {
     return res
       .status(200)
       .send({ result: "Нэвтрэх нэрээ оруулна уу.", success: false });
@@ -57,7 +57,7 @@ router.post("/register", async (req, res) => {
       .send({ result: "Нууц үгээ оруулна уу.", success: false });
   }
 
-  const existUser = await User.findOne({ username });
+  const existUser = await User.findOne({ email });
   if (existUser) {
     return res
       .status(200)
@@ -65,7 +65,7 @@ router.post("/register", async (req, res) => {
   }
 
   const user = new User({
-    username,
+    email,
     password,
   });
 
@@ -77,7 +77,7 @@ router.post("/register", async (req, res) => {
   }
 
   const accessToken = await jwt.sign(
-    { username },
+    { email },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: "15m",

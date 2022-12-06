@@ -14,7 +14,7 @@ router.get("/getUsers", verifyToken, async (req, res) => {
   const users = await User.find();
   const formatted = users.map((d) => ({
     _id: d._id,
-    username: d.username,
+    email: d.email,
   }));
   res.status(200).send({ result: formatted, success: true });
 });
