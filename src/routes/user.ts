@@ -15,14 +15,16 @@ router.get("/getUsers", verifyToken, async (req, res) => {
   const formatted = users.map((d) => ({
     _id: d._id,
     email: d.email,
+    firstName: d.firstName,
+    lastName: d.lastName,
   }));
   res.status(200).send({ result: formatted, success: true });
 });
 
 router.post("/edit", async (req, res) => {
-  const { id, password } = req.body;
+  const { id, firstName, lastName, password } = req.body;
 
-  if (!id || !password) {
+  if (!id || !password || !firstName || !lastName) {
     return res
       .status(200)
       .send({ result: "Хэрэглэгч олдсонгүй", success: false });

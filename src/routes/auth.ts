@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName } = req.body;
   if (!email) {
     return res
       .status(200)
@@ -55,6 +55,16 @@ router.post("/register", async (req, res) => {
     return res
       .status(200)
       .send({ result: "Нууц үгээ оруулна уу.", success: false });
+  }
+  if (!firstName) {
+    return res
+      .status(200)
+      .send({ result: "Нэрээ оруулна уу.", success: false });
+  }
+  if (!lastName) {
+    return res
+      .status(200)
+      .send({ result: "Овгоо оруулна уу.", success: false });
   }
 
   const existUser = await User.findOne({ email });
@@ -67,6 +77,8 @@ router.post("/register", async (req, res) => {
   const user = new User({
     email,
     password,
+    firstName,
+    lastName,
   });
 
   const salt = await bcrypt.genSalt(10);
