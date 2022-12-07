@@ -9,7 +9,12 @@ router.get("/", (req, res) => {
 
 router.get("/getBudget", async (_, res) => {
   const budgets = await Budget.find();
-  res.status(200).send(budgets);
+  const formatted = budgets.map((d) => ({
+    _id: d._id,
+    orlogo: d.orlogo,
+    zarlaga: d.zarlaga,
+  }));
+  res.status(200).send({ result: formatted, success: true });
 });
 
 router.post("/add", async (req, res) => {
