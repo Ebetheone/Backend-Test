@@ -7,11 +7,19 @@ router.get("/", (req, res) => {
   res.status(403).send();
 });
 
-router.get("/getBudget", async (_, res) => {
+router.get("/getOrlogo", async (_, res) => {
   const budgets = await Budget.find();
   const formatted = budgets.map((d) => ({
     _id: d._id,
     orlogo: d.orlogo,
+  }));
+  res.status(200).send({ result: formatted, success: true });
+});
+
+router.get("/getZarlaga", async (_, res) => {
+  const budgets = await Budget.find();
+  const formatted = budgets.map((d) => ({
+    _id: d._id,
     zarlaga: d.zarlaga,
   }));
   res.status(200).send({ result: formatted, success: true });
