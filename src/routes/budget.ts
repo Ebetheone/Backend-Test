@@ -1,5 +1,6 @@
 import express from "express";
-import { Budget } from "../models/Budget";
+import { Orlogo } from "@/models/Orlogo";
+import { Zarlaga } from "@/models/Zarlaga";
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/getOrlogo", async (_, res) => {
-  const budgets = await Budget.find();
+  const budgets = await Orlogo.find();
   const formatted = budgets.map((d) => ({
     _id: d._id,
     orlogo: d.orlogo,
@@ -17,7 +18,7 @@ router.get("/getOrlogo", async (_, res) => {
 });
 
 router.get("/getZarlaga", async (_, res) => {
-  const budgets = await Budget.find();
+  const budgets = await Zarlaga.find();
   const formatted = budgets.map((d) => ({
     _id: d._id,
     zarlaga: d.zarlaga,
@@ -25,20 +26,33 @@ router.get("/getZarlaga", async (_, res) => {
   res.status(200).send({ result: formatted, success: true });
 });
 
-router.post("/add", async (req, res) => {
+router.post("/addOrlogo", async (req, res) => {
   if (!req.body.orlogo) {
     return res
       .status(200)
       .send({ result: "Орлогоо оруулна уу.", success: false });
   }
+
+  const orlogo = new Orlogo({
+    orlogo: req.body.orlogo,
+  });
+
+  await orlogo.save();
+
+  return res.status(200).send({
+    result: orlogo,
+    message: "Амжилттай бүртгэгдлээ.",
+  });
+});
+
+router.post("/addZarlaga", async (req, res) => {
   if (!req.body.zarlaga) {
     return res
       .status(200)
       .send({ result: "Зарлагаа оруулна уу.", success: false });
   }
 
-  const budget = new Budget({
-    orlogo: req.body.orlogo,
+  const budget = new Zarlaga({
     zarlaga: req.body.zarlaga,
   });
 
@@ -50,16 +64,30 @@ router.post("/add", async (req, res) => {
   });
 });
 
-router.post("/delete", async (req, res) => {
-  const budgetId = req.body.userId;
-  if (!budgetId) {
+router.post("/deleteOrlogo", async (req, res) => {
+  const orlogoId = req.body.orlogoId;
+  if (!orlogoId) {
     return res
       .status(200)
-      .send({ result: "budgetId-г оруулна уу.", success: false });
+      .send({ result: "orlogoId-г оруулна уу.", success: false });
   }
-  await Budget.findByIdAndDelete({ _id: budgetId });
+  await Orlogo.findByIdAndDelete({ _id: orlogoId });
   res.status(200).send({
-    result: budgetId,
+    result: orlogoId,
+    success: true,
+  });
+});
+
+router.post("/deleteZarlaga", async (req, res) => {
+  const zarlagaId = req.body.zarlagaId;
+  if (!zarlagaId) {
+    return res
+      .status(200)
+      .send({ result: "zarlagaId-г оруулна уу.", success: false });
+  }
+  await Zarlaga.findByIdAndDelete({ _id: zarlagaId });
+  res.status(200).send({
+    result: zarlagaId,
     success: true,
   });
 });
