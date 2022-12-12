@@ -1,5 +1,5 @@
 import express from "express";
-import { Zarlaga } from "@/models/Zarlaga";
+import { Zarlaga } from "../models/Zarlaga";
 
 const router = express.Router();
 
