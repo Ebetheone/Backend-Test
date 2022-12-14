@@ -1,5 +1,6 @@
 import { Orlogo } from "../models/Orlogo";
 import express from "express";
+import { Orlogo } from "../models/Orlogo";
 
 const router = express.Router();
 
