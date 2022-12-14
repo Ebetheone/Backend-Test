@@ -18,7 +18,8 @@ const main = async () => {
   app.use(bodyParser.json());
   app.use("/auth", require("./routes/auth"));
   app.use("/user", require("./routes/user"));
-  app.use("/budget", require("./routes/budget"));
+  app.use("/orlogo", require("./routes/orlogo"));
+  app.use("/zarlaga", require("./routes/zarlaga"));
 
   app.get("/", (req, res) => {
     res.send("we are on home");
