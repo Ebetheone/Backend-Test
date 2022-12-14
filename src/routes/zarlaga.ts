@@ -31,6 +31,7 @@ router.post("/addZarlaga", async (req, res) => {
 
   return res.status(200).send({
     result: budget,
+    success: true,
     message: "Амжилттай бүртгэгдлээ.",
   });
 });

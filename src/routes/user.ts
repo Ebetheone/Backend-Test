@@ -28,26 +28,34 @@ router.get("/user/:id", verifyToken, async (req, res) => {
 });
 
 router.post("/edit", async (req, res) => {
-  const { id, firstName, lastName, password } = req.body;
+  const { id, firstName, lastName } = req.body;
 
-  if (!id || !password || !firstName || !lastName) {
+  if (!id || !firstName || !lastName) {
     return res
       .status(200)
       .send({ result: "Хэрэглэгч олдсонгүй", success: false });
   }
 
-  const existUser = await User.findById({ _id: id });
-  if (!existUser) {
+  await User.findByIdAndUpdate(id);
+
+  return res
+    .status(200)
+    .send({ result: "Амжилттай хадгалагдлаа", success: true });
+});
+
+router.post("/reset", async (req, res) => {
+  const { id, password } = req.body;
+
+  if (!id || !password) {
     return res
       .status(200)
       .send({ result: "Хэрэглэгч олдсонгүй", success: false });
   }
 
   const hashPass = bcrypt.hashSync(password, 12);
-  await User.findByIdAndUpdate(
-    id,
-    Object.assign(existUser, { password: hashPass })
-  );
+
+  await User.findByIdAndUpdate(id, Object.assign({ password: hashPass }));
+
   return res
     .status(200)
     .send({ result: "Амжилттай хадгалагдлаа", success: true });
