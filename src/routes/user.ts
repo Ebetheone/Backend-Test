@@ -21,6 +21,12 @@ router.get("/getUsers", verifyToken, async (req, res) => {
   res.status(200).send({ result: formatted, success: true });
 });
 
+router.get("/user/:id", verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const userData = await User.find({ _id: id });
+  res.status(200).send({ result: userData, success: true });
+});
+
 router.post("/edit", async (req, res) => {
   const { id, firstName, lastName, password } = req.body;
 

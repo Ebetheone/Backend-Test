@@ -1,6 +1,5 @@
 import { Orlogo } from "../models/Orlogo";
 import express from "express";
-import { Orlogo } from "../models/Orlogo";
 
 const router = express.Router();
 
@@ -32,6 +31,7 @@ router.post("/addOrlogo", async (req, res) => {
 
   return res.status(200).send({
     result: orlogo,
+    success: true,
     message: "Амжилттай бүртгэгдлээ.",
   });
 });
