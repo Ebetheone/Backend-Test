@@ -22,6 +22,8 @@ router.post("/login", async (req, res) => {
     return res.status(200).send({ success: false, result: message });
   }
 
+  const result = await User.findOne({ email });
+
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
     return res.status(200).send({ success: false, result: message });
@@ -40,6 +42,7 @@ router.post("/login", async (req, res) => {
   );
   res.status(200).send({
     result: accessToken,
+    private: result,
     success: true,
   });
 });
@@ -98,6 +101,7 @@ router.post("/register", async (req, res) => {
   await user.save();
   res.status(200).send({
     result: accessToken,
+    private: email,
     success: true,
   });
 });
