@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx eslint --ext .tsx --ext .ts src/ && npx tsc",
-    "start": "nodemon app.js",
+    "start": "node prod/index.js",
     "dev": "npx cross-env NODE_ENV=development tsc-watch --onSuccess 'node --experimental-worker prod/index.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,7 +19,8 @@
     "express": "^4.18.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.2",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "vercel": "^28.9.0"
   },
   "devDependencies": {
     "@nicepack/eslint-ts": "^2.2.1",
