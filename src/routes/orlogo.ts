@@ -12,6 +12,8 @@ router.get("/getOrlogo", async (_, res) => {
   const formatted = budgets.map((d) => ({
     _id: d._id,
     orlogo: d.orlogo,
+    date: d.date,
+    detail: d.detail,
   }));
   res.status(200).send({ result: formatted, success: true });
 });
@@ -22,9 +24,21 @@ router.post("/addOrlogo", async (req, res) => {
       .status(200)
       .send({ result: "Орлогоо оруулна уу.", success: false });
   }
+  if (!req.body.date) {
+    return res
+      .status(200)
+      .send({ result: "Өдрөө оруулна уу.", success: false });
+  }
+  if (!req.body.detail) {
+    return res
+      .status(200)
+      .send({ result: "Утгаа оруулна уу.", success: false });
+  }
 
   const orlogo = new Orlogo({
     orlogo: req.body.orlogo,
+    date: req.body.date,
+    detail: req.body.detail,
   });
 
   await orlogo.save();
