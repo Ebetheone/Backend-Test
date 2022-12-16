@@ -21,13 +21,13 @@ router.get("/getUsers", verifyToken, async (req, res) => {
   res.status(200).send({ result: formatted, success: true });
 });
 
-router.get("/user/:id", verifyToken, async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   const userData = await User.find({ _id: id });
   res.status(200).send({ result: userData, success: true });
 });
 
-router.post("/edit", async (req, res) => {
+router.put("/edit", async (req, res) => {
   const { id, firstName, lastName } = req.body;
 
   if (!id || !firstName || !lastName) {
@@ -36,7 +36,20 @@ router.post("/edit", async (req, res) => {
       .send({ result: "Хэрэглэгч олдсонгүй", success: false });
   }
 
-  await User.findByIdAndUpdate(id);
+  const result = await User.findByIdAndUpdate(
+    {
+      _id: id,
+    },
+    {
+      firstName,
+      lastName,
+    }
+  );
+  if (!result?._id)
+    return res.status(500).send({
+      result: null,
+      success: false,
+    });
 
   return res
     .status(200)
@@ -54,7 +67,10 @@ router.post("/reset", async (req, res) => {
 
   const hashPass = bcrypt.hashSync(password, 12);
 
-  await User.findByIdAndUpdate(id, Object.assign({ password: hashPass }));
+  await User.findByIdAndUpdate(
+    { _id: id },
+    Object.assign({ password: hashPass })
+  );
 
   return res
     .status(200)
