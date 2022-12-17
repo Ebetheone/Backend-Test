@@ -67,10 +67,18 @@ router.post("/reset", async (req, res) => {
 
   const hashPass = bcrypt.hashSync(password, 12);
 
-  await User.findByIdAndUpdate(
-    { _id: id },
+  const result = await User.findByIdAndUpdate(
+    {
+      _id: id,
+    },
     Object.assign({ password: hashPass })
   );
+
+  if (!result?._id)
+    return res.status(500).send({
+      result: null,
+      success: false,
+    });
 
   return res
     .status(200)
