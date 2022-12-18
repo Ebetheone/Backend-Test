@@ -19,5 +19,9 @@ const zarlagaSchema = new Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 export const Zarlaga = mongoose.model<IZarlaga>("Zarlaga", zarlagaSchema);

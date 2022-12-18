@@ -1,3 +1,4 @@
+import { verifyToken } from "../utils/verify";
 import { Orlogo } from "../models/Orlogo";
 import express from "express";
 
@@ -7,8 +8,11 @@ router.get("/", (req, res) => {
   res.status(403).send();
 });
 
-router.get("/getOrlogo", async (_, res) => {
-  const budgets = await Orlogo.find();
+router.get("/getOrlogo", verifyToken, async (req, res) => {
+  const { userId } = req.query;
+
+  const budgets = await Orlogo.find({ userId });
+
   const formatted = budgets.map((d) => ({
     _id: d._id,
     orlogo: d.orlogo,
@@ -19,6 +23,9 @@ router.get("/getOrlogo", async (_, res) => {
 });
 
 router.post("/addOrlogo", async (req, res) => {
+  const { userId } = req.query;
+  const { orlogo, date, detail } = req.body;
+
   if (!req.body.orlogo) {
     return res
       .status(200)
@@ -34,32 +41,32 @@ router.post("/addOrlogo", async (req, res) => {
       .status(200)
       .send({ result: "Утгаа оруулна уу.", success: false });
   }
-
-  const orlogo = new Orlogo({
-    orlogo: req.body.orlogo,
-    date: req.body.date,
-    detail: req.body.detail,
+  const newOrlogo = new Orlogo({
+    orlogo,
+    date,
+    detail,
+    userId,
   });
-
-  await orlogo.save();
+  await newOrlogo.save();
 
   return res.status(200).send({
-    result: orlogo,
+    result: newOrlogo,
     success: true,
     message: "Амжилттай бүртгэгдлээ.",
   });
 });
 
-router.post("/deleteOrlogo", async (req, res) => {
-  const { orlogoId } = req.body;
-  if (!orlogoId) {
+router.delete("/deleteOrlogo", async (req, res) => {
+  const { id } = req.query;
+  console.log(id);
+  if (!id) {
     return res
       .status(200)
       .send({ result: "Орлогын ID-г оруулна уу.", success: false });
   }
-  await Orlogo.findByIdAndDelete({ _id: orlogoId });
+  await Orlogo.findByIdAndDelete({ _id: id });
   res.status(200).send({
-    result: orlogoId,
+    result: id,
     success: true,
   });
 });

@@ -1,5 +1,6 @@
 import express from "express";
 import { Zarlaga } from "../models/Zarlaga";
+import { verifyToken } from "../utils/verify";
 
 const router = express.Router();
 
@@ -7,8 +8,10 @@ router.get("/", (req, res) => {
   res.status(403).send();
 });
 
-router.get("/getZarlaga", async (_, res) => {
-  const budgets = await Zarlaga.find();
+router.get("/getZarlaga", verifyToken, async (req, res) => {
+  const { userId } = req.query;
+
+  const budgets = await Zarlaga.find({ userId });
   const formatted = budgets.map((d) => ({
     _id: d._id,
     zarlaga: d.zarlaga,
@@ -19,6 +22,9 @@ router.get("/getZarlaga", async (_, res) => {
 });
 
 router.post("/addZarlaga", async (req, res) => {
+  const { userId } = req.query;
+  const { zarlaga, date, detail } = req.body;
+
   if (!req.body.zarlaga) {
     return res
       .status(200)
@@ -36,13 +42,13 @@ router.post("/addZarlaga", async (req, res) => {
   }
 
   const budget = new Zarlaga({
-    zarlaga: req.body.zarlaga,
-    date: req.body.date,
-    detail: req.body.detail,
+    zarlaga,
+    date,
+    detail,
+    userId,
   });
 
   await budget.save();
-
   return res.status(200).send({
     result: budget,
     success: true,
@@ -50,16 +56,16 @@ router.post("/addZarlaga", async (req, res) => {
   });
 });
 
-router.post("/deleteZarlaga", async (req, res) => {
-  const { zarlagaId } = req.body;
-  if (!zarlagaId) {
+router.delete("/deleteZarlaga", async (req, res) => {
+  const { id } = req.query;
+  if (!id) {
     return res
       .status(200)
       .send({ result: "zarlagaId-г оруулна уу.", success: false });
   }
-  await Zarlaga.findByIdAndDelete({ _id: zarlagaId });
+  await Zarlaga.findByIdAndDelete({ _id: id });
   res.status(200).send({
-    result: zarlagaId,
+    result: id,
     success: true,
   });
 });

@@ -1,12 +1,57 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/User";
 import jwt from "jsonwebtoken";
+
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/tokenGenerator";
 
 const router = express.Router();
 
 router.get("/", async (_, res) => {
   res.status(403).send();
+});
+
+router.get(
+  "/refresh",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const cookies = req.cookies;
+
+    if (!cookies?.jwt) return res.status(401);
+    const refreshToken = cookies.jwt;
+
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as string,
+      async (err: any, decoded: any) => {
+        if (err) return res.status(403).json({ message: "FORBIDDEN" });
+
+        const foundUser = await User.findOne({ email: decoded.email });
+        if (!foundUser)
+          return res.status(401).json({ message: "Unauthorized" });
+
+        const accessToken = generateAccessToken(foundUser);
+
+        res.cookie("jwt", accessToken, {
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+          sameSite: "none",
+          secure: true,
+        });
+        res.status(200).json({ accessToken });
+        next();
+      }
+    );
+  }
+);
+
+router.post("/logout", async (req: Request, res: Response) => {
+  const cookies = req.cookies;
+  if (!cookies.jwt) return res.status(401);
+  res.clearCookie("jwt", { httpOnly: true, sameSite: "none", secure: true });
+  res.json({ message: "COOKIE CLEARED" });
 });
 
 router.post("/login", async (req, res) => {
@@ -31,15 +76,18 @@ router.post("/login", async (req, res) => {
     return res.status(200).send({ success: false, result: "Алдаа гарлаа" });
   }
 
-  const accessToken = await jwt.sign(
-    { email },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "15m",
-    }
-  );
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+
+  res.cookie("jwt", refreshToken, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
+
   res.status(200).send({
-    result: accessToken,
+    accessToken: accessToken,
     private: user,
     success: true,
   });
@@ -82,6 +130,9 @@ router.post("/register", async (req, res) => {
     lastName,
   });
 
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
@@ -89,14 +140,14 @@ router.post("/register", async (req, res) => {
     return res.status(200).send({ success: false, result: "Алдаа гарлаа" });
   }
 
-  const accessToken = await jwt.sign(
-    { email },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "15m",
-    }
-  );
   await user.save();
+  res.cookie("jwt", refreshToken, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
+
   res.status(200).send({
     result: accessToken,
     private: email,

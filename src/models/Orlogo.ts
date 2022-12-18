@@ -19,5 +19,9 @@ const orlogoSchema = new Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 export const Orlogo = mongoose.model<IOrlogo>("Orlogo", orlogoSchema);

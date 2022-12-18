@@ -21,13 +21,14 @@ router.get("/getUsers", verifyToken, async (req, res) => {
   res.status(200).send({ result: formatted, success: true });
 });
 
-router.get("/:id", verifyToken, async (req, res) => {
-  const { id } = req.params;
-  const userData = await User.find({ _id: id });
+router.get("/getUser", verifyToken, async (req, res) => {
+  const { userId } = req.query;
+  const userData = await User.find({ _id: userId });
+
   res.status(200).send({ result: userData, success: true });
 });
 
-router.put("/edit", async (req, res) => {
+router.put("/edit", verifyToken, async (req, res) => {
   const { id, firstName, lastName } = req.body;
 
   if (!id || !firstName || !lastName) {
