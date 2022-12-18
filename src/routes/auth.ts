@@ -98,7 +98,7 @@ router.post("/register", async (req, res) => {
   if (!email) {
     return res
       .status(200)
-      .send({ result: "Нэвтрэх нэрээ оруулна уу.", success: false });
+      .send({ result: "И-мэйлээ оруулна уу.", success: false });
   }
   if (!password) {
     return res
