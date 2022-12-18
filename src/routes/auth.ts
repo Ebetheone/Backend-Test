@@ -140,6 +140,7 @@ router.post("/register", async (req, res) => {
   }
 
   await user.save();
+
   res.cookie("jwt", refreshToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
@@ -148,8 +149,8 @@ router.post("/register", async (req, res) => {
   });
 
   res.status(200).send({
-    result: accessToken,
-    private: email,
+    accessToken: accessToken,
+    private: user,
     success: true,
   });
 });
