@@ -133,8 +133,7 @@ router.post("/register", async (req, res) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
+  user.password = bcrypt.hashSync(user.password, 12);
 
   if (!process.env.ACCESS_TOKEN_SECRET) {
     return res.status(200).send({ success: false, result: "Алдаа гарлаа" });
