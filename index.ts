@@ -14,7 +14,7 @@ const port = process.env.PORT || 4000;
 const main = async () => {
   app.use(cookies());
   app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+  app.use(cors({ credentials: true }));
   // parse application/json
   app.use(bodyParser.json());
 
