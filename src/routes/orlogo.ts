@@ -58,7 +58,6 @@ router.post("/addOrlogo", async (req, res) => {
 
 router.delete("/deleteOrlogo", async (req, res) => {
   const { id } = req.query;
-  console.log(id);
   if (!id) {
     return res
       .status(200)
