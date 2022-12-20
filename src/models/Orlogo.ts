@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IOrlogo extends Document {
   orlogo: Int32Array;
   date: Date;
+  type: string;
   detail: string;
 }
 
@@ -13,6 +14,10 @@ const orlogoSchema = new Schema({
   },
   date: {
     type: Date,
+    required: true,
+  },
+  type: {
+    type: String,
     required: true,
   },
   detail: {

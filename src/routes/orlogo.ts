@@ -17,6 +17,7 @@ router.get("/getOrlogo", verifyToken, async (req, res) => {
     _id: d._id,
     orlogo: d.orlogo,
     date: d.date,
+    type: d.type,
     detail: d.detail,
   }));
 
@@ -25,7 +26,7 @@ router.get("/getOrlogo", verifyToken, async (req, res) => {
 
 router.post("/addOrlogo", async (req, res) => {
   const { userId } = req.query;
-  const { orlogo, date, detail } = req.body;
+  const { orlogo, date, detail, type } = req.body;
 
   if (!req.body.orlogo) {
     return res
@@ -42,11 +43,18 @@ router.post("/addOrlogo", async (req, res) => {
       .status(200)
       .send({ result: "Утгаа оруулна уу.", success: false });
   }
+  if (!req.body.type) {
+    return res
+      .status(200)
+      .send({ result: "Төрлөө оруулна уу.", success: false });
+  }
+
   const newOrlogo = new Orlogo({
     orlogo,
     date,
     detail,
     userId,
+    type,
   });
   await newOrlogo.save();
 

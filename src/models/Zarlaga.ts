@@ -3,11 +3,16 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IZarlaga extends Document {
   zarlaga: Int32Array;
   date: Date;
+  type: string;
   detail: string;
 }
 
 const zarlagaSchema = new Schema({
   zarlaga: {
+    type: String,
+    required: true,
+  },
+  type: {
     type: String,
     required: true,
   },

@@ -17,13 +17,14 @@ router.get("/getZarlaga", verifyToken, async (req, res) => {
     zarlaga: d.zarlaga,
     date: d.date,
     detail: d.detail,
+    type: d.type,
   }));
   res.status(200).send({ result: formatted, success: true });
 });
 
 router.post("/addZarlaga", async (req, res) => {
   const { userId } = req.query;
-  const { zarlaga, date, detail } = req.body;
+  const { zarlaga, date, detail, type } = req.body;
 
   if (!req.body.zarlaga) {
     return res
@@ -40,12 +41,18 @@ router.post("/addZarlaga", async (req, res) => {
       .status(200)
       .send({ result: "Утгаа оруулна уу.", success: false });
   }
+  if (!req.body.type) {
+    return res
+      .status(200)
+      .send({ result: "Төрлөө оруулна уу.", success: false });
+  }
 
   const budget = new Zarlaga({
     zarlaga,
     date,
     detail,
     userId,
+    type,
   });
 
   await budget.save();
