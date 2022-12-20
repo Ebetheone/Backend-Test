@@ -30,7 +30,7 @@ router.get("/getUser", verifyToken, async (req, res) => {
   res.status(200).send({ result: userData, success: true });
 });
 
-router.post("/edit", verifyToken, async (req, res) => {
+router.post("/edit", async (req, res) => {
   const { id, firstName, lastName } = req.body;
 
   if (!id || !firstName || !lastName) {
