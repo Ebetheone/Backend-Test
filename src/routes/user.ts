@@ -12,12 +12,14 @@ router.get("/", async (_, res) => {
 
 router.get("/getUsers", verifyToken, async (req, res) => {
   const users = await User.find();
+
   const formatted = users.map((d) => ({
     _id: d._id,
     email: d.email,
     firstName: d.firstName,
     lastName: d.lastName,
   }));
+  console.log(formatted);
   res.status(200).send({ result: formatted, success: true });
 });
 

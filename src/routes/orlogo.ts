@@ -19,6 +19,7 @@ router.get("/getOrlogo", verifyToken, async (req, res) => {
     date: d.date,
     detail: d.detail,
   }));
+
   res.status(200).send({ result: formatted, success: true });
 });
 
@@ -58,7 +59,7 @@ router.post("/addOrlogo", async (req, res) => {
 
 router.delete("/deleteOrlogo", async (req, res) => {
   const { id } = req.query;
-  console.log(id);
+
   if (!id) {
     return res
       .status(200)
