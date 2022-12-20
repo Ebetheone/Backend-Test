@@ -53,8 +53,8 @@ router.post("/addOrlogo", async (req, res) => {
     orlogo,
     date,
     detail,
-    userId,
     type,
+    userId,
   });
   await newOrlogo.save();
 

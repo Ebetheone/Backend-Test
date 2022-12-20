@@ -51,8 +51,8 @@ router.post("/addZarlaga", async (req, res) => {
     zarlaga,
     date,
     detail,
-    userId,
     type,
+    userId,
   });
 
   await budget.save();
