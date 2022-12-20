@@ -149,7 +149,7 @@ router.post("/register", async (req, res) => {
   });
 
   res.status(200).send({
-    result: accessToken,
+    accessToken: accessToken,
     private: user,
     success: true,
   });
