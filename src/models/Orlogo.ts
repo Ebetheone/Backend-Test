@@ -7,6 +7,8 @@ export interface IOrlogo extends Document {
   detail: string;
 }
 
+// Income Model
+
 const orlogoSchema = new Schema({
   orlogo: {
     type: String,

@@ -7,6 +7,6 @@ export async function connectToDB(): Promise<void> {
   }
   mongoose.connect(process.env.MONGODB_URI, (err) => {
     if (err) console.error(err);
-    else console.log("🚀 Successfully Connected to Mongoose!");
+    else console.log("🚀 Successfully Connected to Server!");
   });
 }

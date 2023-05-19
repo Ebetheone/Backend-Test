@@ -2,6 +2,8 @@ import express from "express";
 import { Zarlaga } from "../models/Zarlaga";
 import { verifyToken } from "../utils/verify";
 
+// express router ashiglana
+
 const router = express.Router();
 
 router.get("/", (req, res) => {

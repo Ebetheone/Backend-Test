@@ -7,6 +7,8 @@ export interface IUser extends Document {
   lastName: string;
 }
 
+// Client Model
+
 const userSchema = new Schema({
   email: {
     type: String,

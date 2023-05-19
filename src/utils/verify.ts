@@ -1,6 +1,8 @@
 import { NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+// Json Web Token ashiglana
+
 export const verifyToken = (req: any, res: any, next: NextFunction) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
   if (!authHeader) {

@@ -7,6 +7,8 @@ export interface IZarlaga extends Document {
   detail: string;
 }
 
+// Zarlag Model
+
 const zarlagaSchema = new Schema({
   zarlaga: {
     type: String,

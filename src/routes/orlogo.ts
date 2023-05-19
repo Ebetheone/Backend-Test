@@ -2,6 +2,8 @@ import { verifyToken } from "../utils/verify";
 import { Orlogo } from "../models/Orlogo";
 import express from "express";
 
+// express router ashiglana
+
 const router = express.Router();
 
 router.get("/", (req, res) => {

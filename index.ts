@@ -15,7 +15,6 @@ const main = async () => {
   app.use(cookies());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cors({ credentials: true }));
-  // parse application/json
   app.use(bodyParser.json());
 
   app.use("/auth", require("./src/routes/auth"));

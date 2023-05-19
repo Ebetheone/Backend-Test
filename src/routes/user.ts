@@ -4,6 +4,8 @@ import express from "express";
 import { verifyToken } from "../utils/verify";
 import { User } from "../models/User";
 
+// express router ashiglana
+
 const router = express.Router();
 
 router.get("/", async (_, res) => {

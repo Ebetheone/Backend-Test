@@ -8,6 +8,8 @@ import {
   generateRefreshToken,
 } from "../utils/tokenGenerator";
 
+// express router ashiglana
+
 const router = express.Router();
 
 router.get("/", async (_, res) => {
